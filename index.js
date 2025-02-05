@@ -1,28 +1,12 @@
-// Project: User Authentication System
-
-// 1. Developed a robust HTTP server using Express.js in Node.js, 
-// implementing secure user authentication through JWT tokens.
-
-// 2. Designed APIs to handle user registration and login with GET and 
-// POST requests, validating inputs using the Zod library for enhanced 
-// data integrity.
-
-// 3. Conducted thorough testing of the APIs using Postman to ensure 
-// functionality and reliability.
-
-// 4. Implemented global error handling to provide user-friendly error 
-// messages and employed rate limiting to mitigate abuse and ensure fair 
-// usage.
-
-// 5. Utilized MongoDB for efficient storage and retrieval of user data 
-// and metadata to enhance application performance and scalability.
-
 const express = require("express");
 const zod = require("zod");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const config = require("./config"); 
 const app = express();
+require('dotenv').config();
+const MONGODB_URL = process.env.MONGODB_URL;
+const JWT_SECRET = process.env.JWT_SECRET;
+const PORT = process.env.PORT;
 
 // USING MIDDLEWARES GLOBALLY
 app.use(express.json());
@@ -86,7 +70,7 @@ function isValidInput (req, res, next)
 // DEFINITION OF DATABASE SCHEMA AND MODEL
 async function connecting ()
 { 
-  await mongoose.connect(config.mongodbURL, { useNewUrlParser: true, useUnifiedTopology: true });
+  await mongoose.connect();
 }
 
 connecting();
@@ -136,7 +120,7 @@ app.get('/sign-up', async (req, res) => {
   {
     createUser(userName, password, email, age);
 
-    const token = jwt.sign({userName}, password);
+    const token = jwt.sign({userName}, JWT_SECRET);
     res.send(`This is your JWT token ${token}`);
   }
   else
@@ -152,7 +136,7 @@ app.post('/login', (req, res) => {
 
   try
   {
-    jwt.verify(token, password);
+    jwt.verify(token, JWT_SECRET);
     res.send("You're logged-in");
   }
   catch (exception)
@@ -168,7 +152,6 @@ app.use((err, req, res, next) => {
 });
 
 // PORT DEFINITION
-const port = 3000;
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log(`listening on ${port}`)
 });
