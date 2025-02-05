@@ -1,2 +1,3 @@
 # REMOVING CONFIG FILE
-config.js
+.env
+node_modules
