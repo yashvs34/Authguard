@@ -153,5 +153,5 @@ app.use((err, req, res, next) => {
 
 // PORT DEFINITION
 app.listen(PORT, () => {
-  console.log(`listening on ${port}`)
+  console.log(`listening on ${PORT}`)
 });
