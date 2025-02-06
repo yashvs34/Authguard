@@ -70,7 +70,8 @@ function isValidInput (req, res, next)
 // DEFINITION OF DATABASE SCHEMA AND MODEL
 async function connecting ()
 { 
-  await mongoose.connect();
+  await mongoose.connect(MONGODB_URL);
+  console.log("Connected to MongoDB");
 }
 
 connecting();
